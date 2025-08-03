@@ -6,6 +6,12 @@ A minimalist, production-ready environment for deep learning on Duke CS cluster.
 
 ### For New Students (First Time Setup)
 
+Connecting using `$ ssh netid@login.cs.duke.edu`.
+
+Then, you will need to type your netid password after `netid@login.cs.duke.edu's password: `.
+
+Then, you type your Duo password (remember to refresh) after `Duo two-factor login for netid`.
+
 If you're setting up on a new server for the first time, you'll need to configure SSH keys for GitHub:
 
 1. **Generate SSH Key** (if you don't have one):
