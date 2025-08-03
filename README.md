@@ -4,6 +4,34 @@ A minimalist, production-ready environment for deep learning on Duke CS cluster.
 
 ## Quick Start
 
+### For New Students (GitHub Guide)
+
+If you're new to GitHub, here's how to get started:
+
+1. **Install Git** (if not already installed):
+   ```bash
+   # On Ubuntu/Debian
+   sudo apt-get install git
+   
+   # On macOS (with Homebrew)
+   brew install git
+   ```
+
+2. **Clone the repository** (download to your computer):
+   ```bash
+   git clone https://github.com/MasterZhou1/Duke-Slurm.git
+   cd Duke-Slurm
+   ```
+
+3. **Setup the environment**:
+   ```bash
+   ./duke-slurm setup
+   ./duke-slurm activate
+   ./duke-slurm test
+   ```
+
+### For Experienced Users
+
 ```bash
 # Clone and setup
 git clone git@github.com:MasterZhou1/Duke-Slurm.git
