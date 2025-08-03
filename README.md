@@ -4,38 +4,46 @@ A minimalist, production-ready environment for deep learning on Duke CS cluster.
 
 ## Quick Start
 
-### For New Students (GitHub Guide)
+### For New Students (First Time Setup)
 
-If you're new to GitHub, here's how to get started:
+If you're setting up on a new server for the first time, you'll need to configure SSH keys for GitHub:
 
-1. **Install Git** (if not already installed):
+1. **Generate SSH Key** (if you don't have one):
    ```bash
-   # On Ubuntu/Debian
-   sudo apt-get install git
-   
-   # On macOS (with Homebrew)
-   brew install git
+   ssh-keygen -t ed25519 -C "your_email@duke.edu"
+   # Press Enter to accept default location
+   # Enter a passphrase (recommended) or press Enter for no passphrase
    ```
 
-2. **Clone the repository** (download to your computer):
+2. **Add SSH Key to SSH Agent**:
    ```bash
-   git clone https://github.com/MasterZhou1/Duke-Slurm.git
-   cd Duke-Slurm
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
    ```
 
-3. **Setup the environment**:
+3. **Copy Public Key to GitHub**:
    ```bash
-   ./duke-slurm setup
-   ./duke-slurm activate
-   ./duke-slurm test
+   cat ~/.ssh/id_ed25519.pub
+   # Copy the output and add it to GitHub:
+   # 1. Go to https://github.com/settings/keys
+   # 2. Click "New SSH key"
+   # 3. Paste the key and save
    ```
 
-### For Experienced Users
+4. **Test SSH Connection**:
+   ```bash
+   ssh -T git@github.com
+   # You should see: "Hi username! You've successfully authenticated..."
+   ```
+
+### Clone and Setup
 
 ```bash
-# Clone and setup
+# Clone the repository
 git clone git@github.com:MasterZhou1/Duke-Slurm.git
 cd Duke-Slurm
+
+# Setup environment
 ./duke-slurm setup
 ./duke-slurm activate
 ```
