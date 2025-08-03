@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""
+Duke SLURM Deep Learning Environment
+Main entry point for the Duke SLURM environment setup and management.
+"""
+
+import os
+import sys
+import argparse
+import subprocess
+from pathlib import Path
+
+
+def get_project_root():
+    """Get the project root directory."""
+    return Path(__file__).parent
+
+
+def run_script(script_name, *args):
+    """Run a script from the bin directory."""
+    script_path = get_project_root() / "bin" / script_name
+    
+    if not script_path.exists():
+        print(f"Error: Script {script_name} not found at {script_path}")
+        return False
+    
+    # Make sure script is executable
+    os.chmod(script_path, 0o755)
+    
+    # Run the script
+    cmd = [str(script_path)] + list(args)
+    try:
+        result = subprocess.run(cmd, check=True)
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error running {script_name}: {e}")
+        return False
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Duke SLURM Deep Learning Environment",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  duke-slurm setup                    # Run full setup
+  duke-slurm quick-start             # Interactive setup
+  duke-slurm activate                 # Activate environment
+  duke-slurm test                     # Test environment
+  duke-slurm interactive              # Start interactive session
+  duke-slurm install-requirements     # Install requirements
+        """
+    )
+    
+    parser.add_argument("command", choices=[
+        "setup", "quick-start", "activate", "test", "install-requirements", "interactive",
+        "help", "version"
+    ], help="Command to run")
+    
+    parser.add_argument("args", nargs=argparse.REMAINDER, help="Additional arguments")
+    
+    args = parser.parse_args()
+    
+    # Get project root
+    project_root = get_project_root()
+    
+    if args.command == "version":
+        print("Duke SLURM Environment v1.0.0")
+        return
+    
+    elif args.command == "help":
+        parser.print_help()
+        return
+    
+    elif args.command == "setup":
+        success = run_script("setup.sh", *args.args)
+        if success:
+            print("\n✅ Setup completed successfully!")
+            print("Next steps:")
+            print("  duke-slurm activate")
+            print("  duke-slurm test")
+    
+    elif args.command == "quick-start":
+        success = run_script("quick_start.sh")
+        if success:
+            print("\n✅ Quick start completed!")
+    
+    elif args.command == "activate":
+        # Run activation script (compatible with both bash and zsh)
+        print("🐚 Activating PyTorch environment...")
+        success = run_script("activate.sh")
+        
+        if success:
+            print("✅ Environment activated!")
+    
+    elif args.command == "test":
+        # Run simple environment test
+        print("🧪 Testing environment...")
+        try:
+            # Activate environment and test
+            activate_script = project_root / "bin" / "activate_torchpy310.sh"
+            test_cmd = f"source {activate_script} && python -c 'import torch; print(torch.__version__); print(torch.cuda.is_available())'"
+            subprocess.run(test_cmd, shell=True, executable='/bin/bash', check=True)
+            print("✅ Test completed!")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Test failed: {e}")
+    
+    elif args.command == "install-requirements":
+        success = run_script("install_requirements.py", *args.args)
+        if success:
+            print("✅ Requirements installed!")
+        else:
+            print("❌ Requirements installation failed!")
+            sys.exit(1)
+    
+    elif args.command == "interactive":
+        # Start interactive session
+        print("🐺 Starting interactive session...")
+        interactive_script = project_root / "share" / "slurm" / "jobs" / "interactive_srun.sh"
+        if interactive_script.exists():
+            os.system(f"bash {interactive_script}")
+        else:
+            print(f"❌ Interactive script not found: {interactive_script}")
+            sys.exit(1)
+    
+    else:
+        print(f"Unknown command: {args.command}")
+        parser.print_help()
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main() 
