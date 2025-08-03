@@ -114,11 +114,8 @@ Duke-Slurm/
 - **CUDA**: 11.8
 - **Key Packages**: transformers, datasets, accelerate, wandb, tensorboard
 
-### Available Environments
-- `torchpy310`: PyTorch with Python 3.10 (default)
-- `torchpy311`: PyTorch with Python 3.11
-- `tensorflow`: TensorFlow environment
-- `minimal`: Minimal Python environment
+### Environment
+- `torchpy310`: PyTorch with Python 3.10 (default, pre-configured)
 
 ## SLURM Configuration
 
